@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Books</title>
+    <style>
+        :root { --accent:#2b7a78; --muted:#6b6b6b; --bg:#f7f7f9; }
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin: 24px; background: var(--bg); color:#111; }
+        .wrap { max-width: 900px; margin: 0 auto; }
+        h1 { margin-bottom: 12px; color: var(--accent); }
+        .subtitle { margin-top: 4px; margin-bottom: 18px; color: var(--muted); font-size: 0.95rem; }
+        .table { width:100%; border-collapse: collapse; background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+        .table th, .table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #eee; }
+        .table th { font-weight:600; font-size:0.95rem; background:#fafafa; color:var(--muted); }
+        .price { font-weight:700; color:#0b6b6b; }
+        .no-data { padding:18px; text-align:center; color:var(--muted); }
+        /* responsive card fallback for small screens */
+        @media (max-width:640px){
+            .table, .table thead { display:block; }
+            .table tr { display:block; margin: 12px 0; background:#fff; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.04); }
+            .table td { display:flex; justify-content:space-between; padding:12px 16px; border-bottom:none; }
+            .table th { display:none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h1><Bdo:l>Bertie's Book Shop</Bdo:l></h1>
+        <p class="subtitle">Here are the books we sell:</p>
+
+        <% 
+            // If the server passed a `books` variable, use it; otherwise fall back to the inline JSON.
+            const items = (typeof books !== 'undefined') ? books : [
+                { "id": 1, "name": "Brighton Rock", "price": "20.25" },
+                { "id": 2, "name": "Brave New World", "price": "25.00" },
+                { "id": 3, "name": "Animal Farm", "price": "12.99" },
+                { "id": 4, "name": "QURAN", "price": "10.00" },
+                { "id": 5, "name": "al bukhari", "price": "30.00" }
+            ];
+        %>
+
+        <% if (!items || items.length === 0) { %>
+            <div class="no-data">No books to show.</div>
+        <% } else { %>
+            <table class="table" role="table" aria-label="Books">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% items.forEach(item => { %>
+                        <tr>
+                            <td><%= item.id %></td>
+                            <td><%= item.name %></td>
+                            <td class="price">£<%= (typeof item.price === 'number' ? item.price : Number(item.price)).toFixed(2) %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } %>
+    </div>
+</body>
+</html>

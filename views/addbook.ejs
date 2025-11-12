@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Add Book</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container py-5">
+        <h1 class="mb-4">Add a New Book</h1>
+
+        <% if (typeof messages !== 'undefined' && messages.length) { %>
+            <div class="mb-3">
+                <% messages.forEach(function(msg){ %>
+                    <div class="alert alert-info"><%= msg %></div>
+                <% }) %>
+            </div>
+        <% } %>
+
+        <% if (typeof errors !== 'undefined' && errors.length) { %>
+            <div class="mb-3">
+                <% errors.forEach(function(err){ %>
+                    <div class="alert alert-danger"><%= err.msg || err %></div>
+                <% }) %>
+            </div>
+        <% } %>
+
+        <form action="/books" method="POST" enctype="multipart/form-data" class="row g-3">
+            <div class="col-md-6">
+                <label for="title" class="form-label">Title *</label>
+                <input required type="text" id="title" name="title" class="form-control" value="<%= (formData && formData.title) ? formData.title : '' %>" />
+            </div>
+
+            <div class="col-md-6">
+                <label for="author" class="form-label">Author *</label>
+                <input required type="text" id="author" name="author" class="form-control" value="<%= (formData && formData.author) ? formData.author : '' %>" />
+            </div>
+
+            <div class="col-md-4">
+                <label for="genre" class="form-label">Genre</label>
+                <input type="text" id="genre" name="genre" class="form-control" value="<%= (formData && formData.genre) ? formData.genre : '' %>" />
+            </div>
+
+            <div class="col-md-4">
+                <label for="isbn" class="form-label">ISBN</label>
+                <input type="text" id="isbn" name="isbn" class="form-control" value="<%= (formData && formData.isbn) ? formData.isbn : '' %>" />
+            </div>
+
+            <div class="col-md-4">
+                <label for="published" class="form-label">Published Year</label>
+                <input type="number" id="published" name="published" class="form-control" value="<%= (formData && formData.published) ? formData.published : '' %>" />
+            </div>
+
+            <div class="col-12">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" name="description" rows="4" class="form-control"><%= (formData && formData.description) ? formData.description : '' %></textarea>
+            </div>
+
+            <div class="col-md-6">
+                <label for="cover" class="form-label">Cover Image</label>
+                <input type="file" id="cover" name="cover" accept="image/*" class="form-control" />
+            </div>
+
+            <div class="col-md-6 d-flex align-items-end justify-content-end">
+                <div>
+                    <a href="/" class="btn btn-outline-secondary me-2">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Add Book</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
