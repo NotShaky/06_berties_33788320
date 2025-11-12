@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Bargain books — <%= shopData.shopName %></title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+  </head>
+  <body>
+    <h1>Bargain books (under £20)</h1>
+
+    <% if (!books || books.length === 0) { %>
+      <p>No bargain books found.</p>
+    <% } else { %>
+      <ul>
+        <% books.forEach(b => { %>
+          <li><strong><%= b.name %></strong> — £<%= (typeof b.price === 'number' ? b.price : Number(b.price)).toFixed(2) %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+
+    <p><a href="/books/list">Back to full list</a></p>
+  </body>
+</html>

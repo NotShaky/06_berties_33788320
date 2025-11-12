@@ -1,15 +1,27 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Add book to <%=shopData.shopName%></title>
-    <link rel="stylesheet"  type="text/css" href="/main.css" />
-  </head>
-  <body>
-    <h1>Add book to <%=shopData.shopName%></h1>
-    <form method="POST" action="bookadded">
-        <p>Book name: <input id="bookName" type="text" name="name" /></p>
-        <p>Price: <input id="price" type="text" name="price" /></p>
-        <input type="submit" value="Add book" />
-      </form>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add a Book</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        h1 { color: #333; }
+        form { display: flex; flex-direction: column; width: 300px; }
+        label { margin-top: 10px; }
+        input { padding: 5px; font-size: 16px; }
+        button { margin-top: 15px; padding: 8px; font-size: 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Add a Book</h1>
+    <form action="/books/bookadded" method="POST">
+        <label for="name">Book Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="price">Price (£):</label>
+        <input type="number" step="0.01" id="price" name="price" required>
+
+        <button type="submit">Add Book</button>
+    </form>
+</body>
 </html>
