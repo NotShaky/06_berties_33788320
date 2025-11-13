@@ -27,7 +27,7 @@ router.get('/addbook', function(req, res, next) {
     res.render("addbook.ejs")
 });
 
-router.get('/books/list', function(req, res, next) {
+router.get('/list', function(req, res, next) {
     let sqlquery = "SELECT * FROM books"; // query database to get all the books
     // execute sql query
     db.query(sqlquery, (err, result) => {
