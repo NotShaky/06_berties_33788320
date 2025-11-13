@@ -6,9 +6,21 @@ router.get('/search',function(req, res, next){
     res.render("search.ejs")
 });
 
-router.get('/search-result', function (req, res, next) {
-    //searching in the database
-    res.send("You searched for: " + req.query.keyword)
+// Replace the old search-result handler with this improved handler
+router.get('/search_result', function (req, res, next) {
+    const q = (req.query.search_text || '').trim();
+    if (!q) {
+        return res.redirect('/books/search');
+    }
+
+    // Advanced search: partial, case-insensitive match
+    const sql = "SELECT * FROM books WHERE LOWER(name) LIKE LOWER(?)";
+    const param = '%' + q + '%';
+    db.query(sql, [param], (err, result) => {
+        if (err) return next(err);
+        // render the existing view file (no underscore)
+        res.render('searchresult.ejs', { books: result, searchTerm: q });
+    });
 });
 
 router.get('/addbook', function(req, res, next) {

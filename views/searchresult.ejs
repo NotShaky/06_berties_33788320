@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Search results for "<%= searchTerm %>" — <%= shopData.shopName %></title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <style>
+      /* small tweaks to reuse list styling but keep inline so file is standalone */
+      .results { max-width: 900px; margin: 24px auto; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+      h1 { color: darkcyan; margin-bottom: 8px; }
+      .subtitle { color: #6b6b6b; margin-bottom: 16px; }
+      table { width:100%; border-collapse: collapse; background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+      th, td { padding:12px 16px; text-align:left; border-bottom:1px solid #eee; }
+      th { background:#fafafa; color:#6b6b6b; font-weight:600; }
+      .price { font-weight:700; color:#0b6b6b; }
+      .no-data { padding:18px; text-align:center; color:#6b6b6b; }
+    </style>
+  </head>
+  <body>
+    <div class="results">
+      <h1>Search results</h1>
+      <p class="subtitle">Results for "<strong><%= searchTerm %></strong>"</p>
+
+      <% if (!books || books.length === 0) { %>
+        <div class="no-data">No books match your search.</div>
+      <% } else { %>
+        <table role="table" aria-label="Search results">
+          <thead>
+            <tr><th>ID</th><th>Title</th><th>Price</th></tr>
+          </thead>
+          <tbody>
+            <% books.forEach(item => { %>
+              <tr>
+                <td><%= item.id %></td>
+                <td><%= item.name %></td>
+                <td class="price">£<%= (typeof item.price === 'number' ? item.price : Number(item.price)).toFixed(2) %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+
+      <p><a href="/books/search">Back to search</a> · <a href="/books/list">View all books</a></p>
+    </div>
+  </body>
+</html>
