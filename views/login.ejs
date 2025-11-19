@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Login — <%= shopData.shopName %></title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <style>
+      :root { --accent:#2b7a78; --muted:#6b6b6b; --bg:#f7f7f9; }
+      body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:var(--bg); margin:24px; color:#111; }
+      .wrap { max-width:640px; margin:0 auto; }
+      .card { background:#fff; padding:20px; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+      h1 { color:var(--accent); margin-bottom:6px; }
+      label { display:block; color:var(--muted); margin-top:12px; }
+      input[type="text"], input[type="password"] { width:100%; padding:10px; border:1px solid #e6e6e6; border-radius:6px; margin-top:6px; }
+      .actions { margin-top:16px; display:flex; gap:12px; justify-content:flex-end; }
+      .btn { background:var(--accent); color:#fff; padding:10px 14px; border-radius:6px; text-decoration:none; border:none; cursor:pointer; font-weight:600; }
+      .links { margin-top:12px; color:var(--muted); }
+      a.inline { color:var(--accent); text-decoration:none; margin-left:8px; font-weight:600; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <h1>Login to <%= shopData.shopName %></h1>
+        <form method="post" action="loggedin" aria-label="Login form">
+          <label for="username">Username</label>
+          <input id="username" name="username" type="text" required />
+
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" required />
+
+          <div class="actions">
+            <button class="btn" type="submit">Sign in</button>
+          </div>
+        </form>
+
+        <div class="links">
+          <span>Don't have an account?</span>
+          <a class="inline" href="/users/register">Register</a>
+          <span>·</span>
+          <a class="inline" href="/books/list">Back to books</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

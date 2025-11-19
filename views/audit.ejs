@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Audit — <%= shopData.shopName %></title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <style>
+      :root{--accent:#2b7a78;--muted:#6b6b6b;--bg:#f7f7f9}
+      body{font-family:system-ui,Segoe UI,Roboto,Arial;background:var(--bg);margin:24px;color:#111}
+      .wrap{max-width:1000px;margin:0 auto}
+      h1{color:var(--accent)}
+      table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+      th,td{padding:10px 12px;border-bottom:1px solid #eee;text-align:left;font-size:0.95rem}
+      th{background:#fafafa;color:var(--muted);font-weight:600}
+      .no-data{padding:18px;text-align:center;color:var(--muted)}
+      .small{font-size:0.85rem;color:var(--muted)}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Login audit</h1>
+      <% if (!audit || audit.length === 0) { %>
+        <div class="no-data">No audit records found.</div>
+      <% } else { %>
+        <table aria-label="Audit log">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>When</th>
+              <th>Username</th>
+              <th>Success</th>
+              <th>Reason</th>
+              <th>IP</th>
+              <th>User agent</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% audit.forEach(a => { %>
+              <tr>
+                <td><%= a.id %></td>
+                <td class="small"><%= a.created_at %></td>
+                <td><%= a.username || '-' %></td>
+                <td><%= a.success ? 'Yes' : 'No' %></td>
+                <td><%= a.reason || '-' %></td>
+                <td class="small"><%= a.ip || '-' %></td>
+                <td class="small"><%= a.user_agent ? (a.user_agent.length > 80 ? a.user_agent.substring(0,80) + '…' : a.user_agent) : '-' %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+      <p style="margin-top:12px;"><a href="/users/listusers">Back to users</a> · <a href="/books/list">Books</a></p>
+    </div>
+  </body>
+</html>
