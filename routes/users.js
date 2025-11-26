@@ -15,6 +15,14 @@ function recordAudit(username, success, reason, req) {
     });
 }
 
+// Redirect-to-login middleware
+const redirectLogin = (req, res, next) => {
+    if (!req.session || !req.session.userId) {
+        return res.redirect('./login'); // redirect to the login page
+    }
+    next(); // move to the next middleware function
+}
+
 router.get('/register', function (req, res, next) {
     res.render('register.ejs')
 })
@@ -50,7 +58,7 @@ router.post('/registered', function (req, res, next) {
     })
 }); 
 
-router.get('/listusers', function (req, res, next) {
+router.get('/listusers', redirectLogin, function (req, res, next) {
     let sqlquery = "SELECT id, username, first, last, email FROM users"; // query database to get all the users
     // execute sql query
     db.query(sqlquery, (err, result) => {
@@ -86,6 +94,9 @@ router.post('/loggedin', function (req, res, next) {
             if (err) return next(err);
 
             if (match) {
+                // Save user session here, when login is successful
+                req.session.userId = req.body.username;
+
                 recordAudit(username, true, 'login successful', req);
                 const out = 'Login successful. Hello ' + (user.first || '') + ' ' + (user.last || '') + ' (username: ' + user.username + ')';
                 return res.send(out);

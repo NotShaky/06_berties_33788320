@@ -2,6 +2,14 @@
 const express = require("express")
 const router = express.Router()
 
+// Redirect-to-login middleware (requires sessions to be set in index.js)
+const redirectLogin = (req, res, next) => {
+    if (!req.session || !req.session.userId) {
+        return res.redirect('/users/login'); // send to the users login page
+    }
+    next();
+};
+
 router.get('/search',function(req, res, next){
     res.render("search.ejs")
 });
@@ -23,20 +31,16 @@ router.get('/search_result', function (req, res, next) {
     });
 });
 
-router.get('/addbook', function(req, res, next) {
+router.get('/addbook', redirectLogin, function(req, res, next) {
     res.render("addbook.ejs")
 });
 
 router.get('/list', function(req, res, next) {
     let sqlquery = "SELECT * FROM books"; // query database to get all the books
-    // execute sql query
     db.query(sqlquery, (err, result) => {
-        if (err) {
-            return next(err)
-        }
-        // render with the name `books` so [views/list.ejs](views/list.ejs) receives it
-        res.render("list.ejs", { books: result })
-     });
+        if (err) return next(err);
+        res.render('list.ejs', { books: result });
+    });
 });
 
 router.get('/bargainbooks', function(req, res, next) {
