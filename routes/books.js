@@ -6,7 +6,7 @@ const router = express.Router()
 // Redirect-to-login middleware (requires sessions to be set in index.js)
 const redirectLogin = (req, res, next) => {
     if (!req.session || !req.session.userId) {
-        return res.redirect('/users/login'); // send to the users login page
+        return res.redirect('../users/login'); // send to the users login page
     }
     next();
 };
