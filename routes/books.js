@@ -56,7 +56,7 @@ router.get('/bargainbooks', function(req, res, next) {
     });
 });
 
-router.post('/bookadded', redirectLogin,
+router.post('/bookadded',
     [
         check('name').trim().notEmpty().withMessage('Name is required').isLength({ max: 255 }).escape(),
         check('price').trim().notEmpty().withMessage('Price is required').isFloat({ min: 0 }).withMessage('Price must be a positive number').toFloat()
