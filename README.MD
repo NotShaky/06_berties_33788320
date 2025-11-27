@@ -1,45 +1,68 @@
-# Bertie's Books 
+# Bertie's Books
 
 Small Express + EJS app with a MySQL backend. Supports books, user registration/login and a login audit.
 
 Prerequisites
 - Node.js (14+)
 - MySQL server
-- dotenv 
+- npm
 
 Quick setup
 1. Install dependencies:
    npm install
 
-2. Create database and tables (run on the VM or locally)
+2. Configure environment:
+   - Copy `.env.example` -> `.env` and set real credentials (do not commit `.env`).
+   - Required vars: BB_HOST, BB_USER, BB_PASSWORD, BB_DATABASE, PORT (optional).
 
-3. Start the app:
+3. Create database and tables (run on VM or locally):
+   mysql -u root -p < create_db.sql
+   mysql -u root -p berties_books < insert_test_data.sql (optional)
+
+4. Start the app:
    node index.js
+   or
+   PORT=8000 node index.js
 
-Key routes
+Main routes
 - Home: /
 - Books: /books/list, /books/addbook, /books/search
 - Users: /users/register, /users/login, POST /users/loggedin
 - Audit: /users/audit
 
-## dotenv
+dotenv
+- The app uses dotenv. index.js calls require('dotenv').config() at startup.
+- DB credentials and port are read from: BB_HOST, BB_USER, BB_PASSWORD, BB_DATABASE, PORT.
+- Keep a template in `.env.example`. Never commit your real `.env` (it's in `.gitignore`).
 
-- This app uses the dotenv module to keep DB credentials out of source control.
-- The app loads environment variables at startup with:
-  require('dotenv').config()
-  (see index.js). The DB pool reads: BB_USER, BB_PASSWORD, BB_DATABASE.
-- Create a `.env` in the project root (copy `.env.example`) and set real values:
-  BB_USER='berties_books_app'
-  BB_PASSWORD='qwertyuiop'
-  BB_DATABASE='berties_books'
+Database
+- Schema and DDL are in `create_db.sql`. It creates `books`, `users` and `audit_log` tables.
+- Run the script on the VM before testing routes that read/write DB.
+- Use `insert_test_data.sql` for seed data (keeps schema and seeds separate).
 
-## audit
+audit
+- Purpose: record successful and failed login attempts.
+- Storage: `audit_log` table (id, username, success, reason, ip, user_agent, created_at).
+- Implementation: `recordAudit(username, success, reason, req)` in `routes/users.js` inserts an audit row for every login attempt.
+- View: GET `/users/audit` renders `views/audit.ejs` (most recent first).
+- Setup: run the SQL that creates `audit_log` on the VM.
 
-- Purpose: record successful and failed login attempts for monitoring and troubleshooting.
-- Storage: rows are inserted into the `audit_log` table (see `sql/create_audit_table.sql`). Columns include:
-  - `id`, `username`, `success` (1/0), `reason` (text), `ip`, `user_agent`, `created_at`.
-- How it's recorded: the helper function `recordAudit(username, success, reason, req)` in `routes/users.js` inserts an audit row (non-blocking). It is called from the login flow (`POST /users/loggedin`) for every attempt.
-- Viewing: the audit history is rendered at `GET /users/audit` using `views/audit.ejs`. The route queries recent records (most recent first).
-- Setup: create the table on the VM or locally:
+access control
+- Session-based auth with express-session (session cookie).
+- On successful login the app sets `req.session.userId`.
+- Protected routes use `redirectLogin` middleware. By default routes protected include: /books/addbook, /users/listusers, /users/audit (check route files for exact list).
+- Logout clears session and cookie.
 
-- Privacy note: IP and user-agent are stored for audit purposes — treat this data appropriately and avoid exposing it publicly.
+data validation
+- Server-side validation uses express-validator.
+- Registration checks include: valid email, username length (5–20, allowed chars), password length >= 8, presence/length limits for first/last names.
+- Uniqueness checks for username/email are done against the DB before insert (returns validation errors).
+
+sanitisation
+- Inputs that may be rendered back (first, last, username, email) are sanitized with express-sanitizer to mitigate XSS.
+- Passwords are not HTML-sanitized (to avoid altering the secret); they are trimmed and validated for length/complexity, then hashed before storage.
+
+security notes
+- Passwords are hashed with bcrypt before storing (saltRounds configurable).
+- Database credentials must not be committed. Use `.env` or environment variables on the VM.
+- Audit data includes IP and user-agent — treat it as sensitive and restrict access.
