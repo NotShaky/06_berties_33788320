@@ -33,7 +33,7 @@ router.post('/registered',
     [ 
       check('email').isEmail(), 
       check('username').isLength({ min: 5, max: 20 }),
-      check('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters long'),
+      check('password').isLength({ min: 6 }).withMessage('Password must be at least 8 characters long'),
       check('first').notEmpty().withMessage('First name is required'),
       check('last').notEmpty().withMessage('Last name is required')
     ],
