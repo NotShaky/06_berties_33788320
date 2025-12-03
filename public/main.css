@@ -41,3 +41,82 @@ a:link {
     text-decoration: none;
     padding:5px;
   }
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.weather-form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 10px 0 18px;
+}
+
+.weather-form input[type="text"] {
+  padding: 8px 10px;
+  border: 1px solid cadetblue;
+  border-radius: 4px;
+  min-width: 240px;
+}
+
+.btn {
+  background: orangered;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: tomato;
+}
+
+.error {
+  color: tomato;
+}
+
+.weather-card {
+  border: 1px solid cadetblue;
+  border-radius: 8px;
+  padding: 14px 16px;
+  background: #f7fbfc;
+}
+
+.weather-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.weather-header .icon {
+  width: 72px;
+  height: 72px;
+}
+
+.muted {
+  color: cadetblue;
+  margin-top: -8px;
+}
+
+.metrics {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px 14px;
+}
+
+.metric {
+  padding: 6px 0;
+}
+
+.metric strong {
+  display: block;
+  color: darkcyan;
+  font-weight: 700;
+}

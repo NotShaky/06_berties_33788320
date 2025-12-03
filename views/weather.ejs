@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Weather - <%= shopData.shopName %></title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Weather</h1>
+
+      <form class="weather-form" method="get" action="/weather/now">
+        <label for="city">City:</label>
+        <input id="city" name="city" type="text" placeholder="e.g. London" value="<%= city || '' %>" autofocus />
+        <button class="btn" type="submit">Get weather</button>
+      </form>
+
+      <% if (error) { %>
+        <p class="error">Error: <%= error %></p>
+      <% } %>
+
+      <% if (weather) { %>
+        <div class="weather-card">
+          <div class="weather-header">
+            <div>
+              <h2><%= weather.name %>, <%= weather.country %></h2>
+              <p class="muted"><%= weather.description %></p>
+            </div>
+            <% if (weather.icon) { %>
+              <img class="icon" src="https://openweathermap.org/img/wn/<%= weather.icon %>@2x.png" alt="icon" />
+            <% } %>
+          </div>
+
+          <ul class="metrics">
+            <li class="metric"><strong>Temperature</strong><span><%= Math.round(weather.temp) %>°C</span></li>
+            <li class="metric"><strong>Feels like</strong><span><%= Math.round(weather.feels_like) %>°C</span></li>
+            <li class="metric"><strong>Min/Max</strong><span><%= Math.round(weather.temp_min) %>°C / <%= Math.round(weather.temp_max) %>°C</span></li>
+            <li class="metric"><strong>Humidity</strong><span><%= weather.humidity %>%</span></li>
+            <li class="metric"><strong>Pressure</strong><span><%= weather.pressure %> hPa</span></li>
+            <li class="metric"><strong>Wind</strong>
+              <span>
+                <%= weather.wind_speed %> m/s
+                <% if (weather.wind_direction) { %>(<%= weather.wind_direction %>)<% } %>
+                <% if (weather.wind_gust) { %> · gust <%= weather.wind_gust %> m/s<% } %>
+              </span>
+            </li>
+            <li class="metric"><strong>Clouds</strong><span><%= typeof weather.clouds !== 'undefined' ? weather.clouds + '%' : '—' %></span></li>
+            <li class="metric"><strong>Visibility</strong><span><%= typeof weather.visibility !== 'undefined' ? weather.visibility + ' m' : '—' %></span></li>
+            <li class="metric"><strong>Sunrise</strong><span><%= weather.sunrise %></span></li>
+            <li class="metric"><strong>Sunset</strong><span><%= weather.sunset %></span></li>
+          </ul>
+        </div>
+      <% } %>
+
+      <p><a href="/">Home</a></p>
+    </div>
+  </body>
+</html>
