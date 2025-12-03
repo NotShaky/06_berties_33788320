@@ -2,8 +2,8 @@ const request = require('request');
 const express = require("express");
 const router = express.Router();
 
-// GET /weather/now -> interactive page; supports ?city=...
-router.get('/now', function(req, res, next){
+// GET /weather -> interactive weather page with city search
+router.get('/', function(req, res, next){
   const apiKey = process.env.OPENWEATHER_API_KEY || '9ae65d03aa942b10fb88e6f9d0a6750b';
 
   // read and sanitize city; default to london
@@ -58,12 +58,6 @@ router.get('/now', function(req, res, next){
 
     res.render('weather.ejs', { error: null, weather, city });
   });
-});
-
-// Redirect /weather -> /weather/now (keeps old links working)
-router.get('/', (req, res) => {
-  const q = req.query.city ? `?city=${encodeURIComponent(req.query.city)}` : '';
-  res.redirect(`/weather/now${q}`);
 });
 
 module.exports = router;
